@@ -44,6 +44,23 @@ def _split_data(x_data, y_data=None, train_ratio=0, split_type='uniform'):
         y_train = y_train[indexes]
     return (x_train, y_train), (x_test, y_test)
 
+def toList(st):
+    return st.split(' ')[:-1]
+
+def load_linux(log_file, label_file=None, window='session', train_ratio=0.5, split_type='sequential', save_csv=False, window_size=0):
+    f = open(log_file, "r")
+    lines = f.readlines()
+    f.close()
+    df = pd.DataFrame({'EventId': list(map(lambda l: l.split('|')[0], lines)), 'EventSequence': list(map(lambda l: toList(l.split('|', maxsplit=1)[1]), lines))})
+    if label_file is None:
+            # Split training and validation set sequentially
+            x_data = df['EventSequence'].values
+            (x_train, _), (x_test, _) = _split_data(x_data, train_ratio=train_ratio, split_type=split_type)
+            print('Total: {} instances, train: {} instances, test: {} instances'.format(
+                  x_data.shape[0], x_train.shape[0], x_test.shape[0]))
+            return (x_train, None), (x_test, None), df
+
+
 def load_HDFS(log_file, label_file=None, window='session', train_ratio=0.5, split_type='sequential', save_csv=False, window_size=0):
     """ Load HDFS structured log into train and test data
 
@@ -87,6 +104,7 @@ def load_HDFS(log_file, label_file=None, window='session', train_ratio=0.5, spli
                     data_dict[blk_Id] = []
                 data_dict[blk_Id].append(row['EventId'])
         data_df = pd.DataFrame(list(data_dict.items()), columns=['BlockId', 'EventSequence'])
+        
         
         if label_file:
             # Split training and validation set in a class-uniform way
