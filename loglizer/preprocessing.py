@@ -6,7 +6,6 @@ Authors:
 
 """
 
-
 import pandas as pd
 import os
 import numpy as np
@@ -55,7 +54,7 @@ class FeatureExtractor(object):
         self.normalization = None
         self.oov = None
 
-    def fit_transform(self, X_seq, term_weighting=None, normalization=None, oov=False, min_count=1):
+    def fit_transform(self, X_seq, term_weighting=None, normalization=None, oov=False, min_count=1, num_keys=0):
         """ Fit and transform the data matrix
 
         Arguments
@@ -79,6 +78,11 @@ class FeatureExtractor(object):
         for i in range(X_seq.shape[0]):
             event_counts = Counter(X_seq[i])
             X_counts.append(event_counts)
+        if num_keys != 0:
+            for i in range(num_keys):
+                X_counts[0][i] += 1
+                X_counts[0][i] -= 1
+        #print(X_counts[0])
         X_df = pd.DataFrame(X_counts)
         X_df = X_df.fillna(0)
         self.events = X_df.columns

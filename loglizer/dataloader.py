@@ -47,7 +47,7 @@ def _split_data(x_data, y_data=None, train_ratio=0, split_type='uniform'):
 
 
 def toList(st):
-    return st.split(' ')[:-1]
+    return map(int, st.split(' ')[:-1])
 
 
 def readLinuxLog(path):

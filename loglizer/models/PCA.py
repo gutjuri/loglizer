@@ -80,6 +80,7 @@ class PCA(object):
             for i in range(3):
                 for j in range(n_components, num_events):
                     phi[i] += np.power(sigma[j], i + 1)
+            #print(sigma)
             h0 = 1.0 - 2 * phi[0] * phi[2] / (3.0 * phi[1] * phi[1])
             self.threshold = phi[0] * np.power(self.c_alpha * np.sqrt(2 * phi[1] * h0 * h0) / phi[0]
                                                + 1.0 + phi[1] * h0 * (h0 - 1) / (phi[0] * phi[0]), 

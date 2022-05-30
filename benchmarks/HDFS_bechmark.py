@@ -8,8 +8,8 @@ from loglizer.models import *
 import pandas as pd
 
 
-run_models = ['LogClustering', "PCA"]
-hparams_search = False
+run_models = ["PCA"]
+hparams_search = True
 print("Starting benchmark")
 
 if __name__ == '__main__':
@@ -26,30 +26,30 @@ if __name__ == '__main__':
         if _model == 'PCA':
             feature_extractor = preprocessing.FeatureExtractor()
             x_train = feature_extractor.fit_transform(x_tr, term_weighting='tf-idf',
-                                                      normalization='zero-mean')
+                                                      normalization='zero-mean',num_keys=415)
             x_test = feature_extractor.transform(x_te)
             x_val = feature_extractor.transform(x_va)
             model = PCA(n_components=18)
             model.fit(x_train)
             if hparams_search:
                 for n_components in range(19):
-                    print(n_components)
-                    model = PCA(n_components=n_components)
-                    model.fit(x_train)
-                    precision, recall, f1 = model.evaluate(x_test, y_test)
-                    benchmark_results.append(
-                        [_model + '-test-' + str(n_components), precision, recall, f1])
+                    for c_alpha in [1.7507, 1.9600, 2.5758, 2.807, 2.9677, 3.2905, 3.4808, 3.8906, 4.4172]:
+                        model = PCA(n_components=n_components, c_alpha=c_alpha)
+                        model.fit(x_train)
+                        precision, recall, f1 = model.evaluate(x_test, y_test)
+                        benchmark_results.append(
+                            [_model + '-test-' + str(n_components) + "-" + str(c_alpha), precision, recall, f1])
 
         elif _model == 'InvariantsMiner':
             feature_extractor = preprocessing.FeatureExtractor()
-            x_train = feature_extractor.fit_transform(x_tr)
+            x_train = feature_extractor.fit_transform(x_tr, num_keys=415)
             model = InvariantsMiner(epsilon=0.5)
             model.fit(x_train)
 
         elif _model == 'LogClustering':
             feature_extractor = preprocessing.FeatureExtractor()
             x_train = feature_extractor.fit_transform(
-                x_tr, term_weighting='tf-idf')
+                x_tr, term_weighting='tf-idf', num_keys=415)
             x_test = feature_extractor.transform(x_te)
             x_val = feature_extractor.transform(x_va)
             model = LogClustering(max_dist=0.3, anomaly_threshold=0.3)
@@ -59,6 +59,7 @@ if __name__ == '__main__':
                     for at in [0.1, 0.2, 0.3, 0.4]:
                         model = LogClustering(
                             max_dist=mdist, anomaly_threshold=at)
+                        model.fit(x_train)
                         precision, recall, f1 = model.evaluate(x_test, y_test)
                         benchmark_results.append(
                             [_model + '-test-' + str(mdist) + "-" + str(at), precision, recall, f1])
