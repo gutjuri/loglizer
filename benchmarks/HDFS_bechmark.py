@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from sklearn.metrics import make_scorer, f1_score
-from sklearn.model_selection import GridSearchCV
+import sys
+sys.path.append('../')
 from loglizer import dataloader, preprocessing
 from loglizer.models import *
 import pandas as pd
-import sys
-sys.path.append('../')
 
-run_models = ['LogClustering', "PCA"]
+
+run_models = ["InvariantsMiner"] #['LogClustering', "PCA"]
 hparams_search = False
-
+print("Starting benchmark")
 
 if __name__ == '__main__':
     x_tr, (x_te, y_test), (x_va, y_val) = dataloader.load_linux(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],
