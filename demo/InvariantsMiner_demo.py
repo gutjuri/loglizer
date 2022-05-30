@@ -10,11 +10,14 @@ struct_log = '../data/HDFS/HDFS_100k.log_structured.csv' # The structured log fi
 label_file = '../data/HDFS/anomaly_label.csv' # The anomaly label file
 epsilon = 0.5 # threshold for estimating invariant space
 
+struct_log = sys.argv[1]
+label_file = sys.argv[2]
+
 if __name__ == '__main__':
-    (x_train, y_train), (x_test, y_test) = dataloader.load_HDFS(struct_log,
+    (x_train, y_train), (x_test, y_test) = dataloader.load_linux(struct_log,
                                                                 label_file=label_file,
                                                                 window='session', 
-                                                                train_ratio=0.5,
+                                                                train_ratio=0.1,
                                                                 split_type='sequential')
     feature_extractor = preprocessing.FeatureExtractor()
     x_train = feature_extractor.fit_transform(x_train)

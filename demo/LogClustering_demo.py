@@ -11,8 +11,11 @@ label_file = '../data/HDFS/anomaly_label.csv' # The anomaly label file
 max_dist = 0.3 # the threshold to stop the clustering process
 anomaly_threshold = 0.3 # the threshold for anomaly detection
 
+struct_log = sys.argv[1]
+label_file = sys.argv[2]
+
 if __name__ == '__main__':
-    (x_train, y_train), (x_test, y_test) = dataloader.load_HDFS(struct_log,
+    (x_train, y_train), (x_test, y_test) = dataloader.load_linux(struct_log,
                                                                 label_file=label_file,
                                                                 window='session', 
                                                                 train_ratio=0.5,

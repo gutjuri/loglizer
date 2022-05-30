@@ -10,8 +10,11 @@ struct_log = '../data/HDFS/HDFS_100k.log_structured.csv' # The structured log fi
 label_file = '../data/HDFS/anomaly_label.csv' # The anomaly label file
 anomaly_ratio = 0.03 # Estimate the ratio of anomaly samples in the data
 
+struct_log = sys.argv[1]
+label_file = sys.argv[2]
+
 if __name__ == '__main__':
-    (x_train, y_train), (x_test, y_test) = dataloader.load_HDFS(struct_log,
+    (x_train, y_train), (x_test, y_test) = dataloader.load_linux(struct_log,
                                                                 label_file=label_file,
                                                                 window='session', 
                                                                 train_ratio=0.5,
