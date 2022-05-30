@@ -8,7 +8,7 @@ from loglizer.models import *
 import pandas as pd
 
 
-run_models = ["InvariantsMiner"] #['LogClustering', "PCA"]
+run_models = ['LogClustering', "PCA"]
 hparams_search = False
 print("Starting benchmark")
 
