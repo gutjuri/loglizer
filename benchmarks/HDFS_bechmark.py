@@ -44,11 +44,22 @@ if __name__ == '__main__':
         elif _model == 'InvariantsMiner':
             feature_extractor = preprocessing.FeatureExtractor()
             x_train = feature_extractor.fit_transform(x_tr, num_keys=415)
+            x_test = feature_extractor.transform(x_te)
+            x_val = feature_extractor.transform(x_va)
             t_s = time.time()
             model = InvariantsMiner(epsilon=0.5)
-            model.fit(x_train)
+            #model.fit(x_train)
             t_e = time.time()
             print(f"Time for Training: {t_e - t_s:.3f}s")
+            if hparams_search:
+                for p in [0.96,0.96,0.97,0.98,0.99,0.995,0.999,1.0]:
+                    for e in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]:
+                        model = InvariantsMiner(percentage=p, epsilon=e)
+                        model.fit(x_train)
+                        precision, recall, f1 = model.evaluate(x_test, y_test)
+                        benchmark_results.append(
+                            [_model + '-test-' + str(p) + "-" + str(e), precision, recall, f1])
+
 
         elif _model == 'LogClustering':
             feature_extractor = preprocessing.FeatureExtractor()
