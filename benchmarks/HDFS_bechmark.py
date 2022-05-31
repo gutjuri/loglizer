@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import sys
+from time import time
 sys.path.append('../')
 from loglizer import dataloader, preprocessing
 from loglizer.models import *
 import pandas as pd
 
 
-run_models = ["LogClustering"]
+run_models = ["InvariantsMiner"]
 hparams_search = True
 print("Starting benchmark")
 
@@ -43,8 +44,11 @@ if __name__ == '__main__':
         elif _model == 'InvariantsMiner':
             feature_extractor = preprocessing.FeatureExtractor()
             x_train = feature_extractor.fit_transform(x_tr, num_keys=415)
+            t_s = time.time()
             model = InvariantsMiner(epsilon=0.5)
             model.fit(x_train)
+            t_e = time.time()
+            print(f"Time for Training: {t_e - t_s:.3f}s")
 
         elif _model == 'LogClustering':
             feature_extractor = preprocessing.FeatureExtractor()
@@ -73,7 +77,10 @@ if __name__ == '__main__':
         x_test = feature_extractor.transform(x_te)
         x_val = feature_extractor.transform(x_va)
         print('Validation accuracy:')
+        t_s = time.time()
         precision, recall, f1 = model.evaluate(x_val, y_val)
+        t_e = time.time()
+        print(f"Time for Predicting: {t_e - t_s:.3f}s")
         benchmark_results.append([_model + '-val', precision, recall, f1])
 
     pd.DataFrame(benchmark_results, columns=['Model', 'Precision', 'Recall', 'F1']) \
