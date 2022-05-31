@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from time import time
+import time
 sys.path.append('../')
 from loglizer import dataloader, preprocessing
 from loglizer.models import LogClustering, InvariantsMiner, PCA
