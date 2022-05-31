@@ -5,7 +5,7 @@ import sys
 from time import time
 sys.path.append('../')
 from loglizer import dataloader, preprocessing
-from loglizer.models import *
+from loglizer.models import LogClustering, InvariantsMiner, PCA
 import pandas as pd
 
 
@@ -67,12 +67,6 @@ if __name__ == '__main__':
                         precision, recall, f1 = model.evaluate(x_test, y_test)
                         benchmark_results.append(
                             [_model + '-test-' + str(mdist) + "-" + str(at), precision, recall, f1])
-
-        elif _model == 'IsolationForest':
-            x_train = feature_extractor.fit_transform(x_tr)
-            model = IsolationForest(random_state=2019, max_samples=0.9999, contamination=0.03,
-                                    n_jobs=4)
-            model.fit(x_train)
 
         x_test = feature_extractor.transform(x_te)
         x_val = feature_extractor.transform(x_va)
