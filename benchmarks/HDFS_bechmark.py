@@ -8,7 +8,7 @@ from loglizer.models import *
 import pandas as pd
 
 
-run_models = ["PCA"]
+run_models = ["LogClustering"]
 hparams_search = True
 print("Starting benchmark")
 
