@@ -10,7 +10,7 @@ from loglizer.models import LogClustering, InvariantsMiner, PCA
 import pandas as pd
 
 run_models = ["InvariantsMiner"]
-hparams_search = True
+hparams_search = False
 print("Starting benchmark")
 
 if __name__ == '__main__':
@@ -48,7 +48,7 @@ if __name__ == '__main__':
             x_val = feature_extractor.transform(x_va)
             t_s = time.time()
             model = InvariantsMiner(epsilon=0.5)
-            #model.fit(x_train)
+            model.fit(x_train)
             t_e = time.time()
             print(f"Time for Training: {t_e - t_s:.3f}s")
             if hparams_search:
