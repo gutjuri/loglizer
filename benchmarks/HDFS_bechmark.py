@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+print("Called script")
 
 import sys
 import time
@@ -7,7 +8,6 @@ sys.path.append('../')
 from loglizer import dataloader, preprocessing
 from loglizer.models import LogClustering, InvariantsMiner, PCA
 import pandas as pd
-
 
 run_models = ["InvariantsMiner"]
 hparams_search = True
