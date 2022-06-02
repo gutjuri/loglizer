@@ -93,4 +93,4 @@ if __name__ == '__main__':
         benchmark_results.append([_model + '-val', precision, recall, f1])
 
     pd.DataFrame(benchmark_results, columns=['Model', 'Precision', 'Recall', 'F1']) \
-      .to_csv('benchmark_result.csv', index=False)
+      .to_csv('benchmark_result2.csv', index=False)
