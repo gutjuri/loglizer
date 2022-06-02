@@ -51,9 +51,14 @@ if __name__ == '__main__':
             #model.fit(x_train)
             t_e = time.time()
             print(f"Time for Training: {t_e - t_s:.3f}s")
+            pvals = [0.96,0.96,0.97,0.98,0.99,0.995,0.999,1.0]
+            evals = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+            i = 0
             if hparams_search:
-                for p in [0.96,0.96,0.97,0.98,0.99,0.995,0.999,1.0]:
-                    for e in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]:
+                for p in pvals:
+                    for e in evals:
+                        i += 1
+                        print(f"Testing combination {i}/{len(pvals) * len(evals)}")
                         model = InvariantsMiner(percentage=p, epsilon=e)
                         model.fit(x_train)
                         precision, recall, f1 = model.evaluate(x_test, y_test)
@@ -79,8 +84,7 @@ if __name__ == '__main__':
                         benchmark_results.append(
                             [_model + '-test-' + str(mdist) + "-" + str(at), precision, recall, f1])
 
-        x_test = feature_extractor.transform(x_te)
-        x_val = feature_extractor.transform(x_va)
+
         print('Validation accuracy:')
         t_s = time.time()
         precision, recall, f1 = model.evaluate(x_val, y_val)
