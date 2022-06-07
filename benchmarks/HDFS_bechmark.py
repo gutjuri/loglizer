@@ -10,7 +10,7 @@ from loglizer.models import LogClustering, InvariantsMiner, PCA
 import pandas as pd
 import json
 
-run_models = ["LogClustering"]
+run_models = ["PCA"]
 hparams_search = False
 print("Starting benchmark")
 
