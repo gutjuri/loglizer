@@ -70,7 +70,7 @@ class LogClustering(object):
         precision, recall, f1 = metrics(y_pred, y_true)
         print('Precision: {:.3f}, recall: {:.3f}, F1-measure: {:.3f}\n' \
               .format(precision, recall, f1))
-        return precision, recall, f1
+        return precision, recall, f1,y_pred
 
     def _offline_clustering(self, X):
         print('Starting offline clustering...')

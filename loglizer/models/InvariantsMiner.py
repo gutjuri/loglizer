@@ -69,7 +69,7 @@ class InvariantsMiner(object):
         y_pred = self.predict(X)
         precision, recall, f1 = metrics(y_pred, y_true)
         print('Precision: {:.3f}, recall: {:.3f}, F1-measure: {:.3f}\n'.format(precision, recall, f1))
-        return precision, recall, f1
+        return precision, recall, f1, y_pred
 
     def _estimate_invarant_space(self, X):
         """ Estimate the dimension of invariant space using SVD decomposition
