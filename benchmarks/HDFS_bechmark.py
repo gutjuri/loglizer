@@ -103,4 +103,4 @@ if __name__ == '__main__':
         benchmark_results.append([_model + '-val', precision, recall, f1, t_e -t_s, t_e_p - t_s_p])
 
     pd.DataFrame(benchmark_results, columns=['Model', 'Precision', 'Recall', 'F1', 't_train', 't_predict']) \
-      .to_csv('benchmark_result_logcluster.csv', index=False)
+      .to_csv(f"benchmark_result_{_model}.csv", index=False)
