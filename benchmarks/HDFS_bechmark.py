@@ -98,7 +98,7 @@ if __name__ == '__main__':
         precision, recall, f1, y_pred = model.evaluate(x_val, y_val)
         t_e_p = time.time()
         with open(f"vecs-{_model}", "w") as f:
-            f.write(json.dumps({"y_pred": y_pred, "y_true": y_val}))
+            f.write(json.dumps({"y_pred": y_pred.tolist(), "y_true": y_val.tolist()}))
         print(f"Time for Predicting: {t_e_p - t_s_p:.3f}s")
         benchmark_results.append([_model + '-val', precision, recall, f1, t_e -t_s, t_e_p - t_s_p])
 
