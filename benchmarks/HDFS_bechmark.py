@@ -52,7 +52,7 @@ if __name__ == '__main__':
             t_e = time.time()
             print(f"Time for Training: {t_e - t_s:.3f}s")
             pvals = [0.96,0.96,0.97,0.98,0.99,0.995,0.999,1.0]
-            evals = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+            evals = [0.1]#[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
             i = 0
             if hparams_search:
                 for p in pvals:
@@ -60,10 +60,13 @@ if __name__ == '__main__':
                         i += 1
                         print(f"Testing combination {i}/{len(pvals) * len(evals)}")
                         model = InvariantsMiner(percentage=p, epsilon=e)
+                        t_s = time.time()
                         model.fit(x_train)
+                        t_e =time.time()
                         precision, recall, f1 = model.evaluate(x_test, y_test)
+                        t_e2 = time.time()
                         benchmark_results.append(
-                            [_model + '-test-' + str(p) + "-" + str(e), precision, recall, f1])
+                            [_model + '-test-' + str(p) + "-" + str(e), precision, recall, f1, t_e - t_s, t_e2 - t_e])
 
 
         elif _model == 'LogClustering':
@@ -92,5 +95,5 @@ if __name__ == '__main__':
         print(f"Time for Predicting: {t_e - t_s:.3f}s")
         benchmark_results.append([_model + '-val', precision, recall, f1])
 
-    pd.DataFrame(benchmark_results, columns=['Model', 'Precision', 'Recall', 'F1']) \
+    pd.DataFrame(benchmark_results, columns=['Model', 'Precision', 'Recall', 'F1', 't_train', 't_predict']) \
       .to_csv('benchmark_result2.csv', index=False)
