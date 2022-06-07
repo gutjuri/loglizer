@@ -22,7 +22,7 @@ from collections import defaultdict
 import pandas as pd
 
 
-models = ["PCA", "LogClustering", "InvariantsMiner"]
+models = ["PCA", "LogCluster", "InvariantsMiner", "DeepLog"]
 
 l_tr = 27742
 l_val = 60486
