@@ -61,7 +61,7 @@ def make_cm(res):
 
 def output_t1(res):
     for x, m in res.items():
-        print(f"{x:17}&${m['Precision']}$&${m['Recall']}$&${m['F1']}$&{'?SI{'}{1000*m['t_fit']/l_tr}{'}{?milli?second}'}&{'?SI{'}{1000*m['t_predict']/(l_val)}{'}{?milli?second}??'}".replace("?", "\\"))
+        print(f"{x:17}&${m['Precision']}$&${m['Recall']}$&${m['F1']}$&{'?SI{'}{1000*m['t_train']/l_tr}{'}{?milli?second}'}&{'?SI{'}{1000*m['t_predict']/(l_val)}{'}{?milli?second}??'}".replace("?", "\\"))
 
 def output_t2(vector):
     for x, m in vector.items():
