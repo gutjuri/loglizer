@@ -27,7 +27,6 @@ models = ["PCA", "LogClustering", "InvariantsMiner"]
 l_tr = 27742
 l_val = 60486
 
-pd.options.display.float_format = "{:.3f}".format
 
 def make_cm(res):
     fig = plt.figure()
@@ -61,7 +60,7 @@ def make_cm(res):
 
 def output_t1(res):
     for x, m in res.items():
-        print(f"{x:17}&${m['Precision']}$&${m['Recall']}$&${m['F1']}$&{'?SI{'}{1000*m['t_train']/l_tr}{'}{?milli?second}'}&{'?SI{'}{1000*m['t_predict']/(l_val)}{'}{?milli?second}??'}".replace("?", "\\"))
+        print(f"{x:17}&${m['Precision'][0]:.3f}$&${m['Recall'][0]:.3f}$&${m['F1'][0]:.3f}$&{'?SI{'}{1000*m['t_train'][0]/l_tr:.3f}{'}{?milli?second}'}&{'?SI{'}{1000*m['t_predict'][0]/(l_val):.3f}{'}{?milli?second}??'}".replace("?", "\\"))
 
 def output_t2(vector):
     for x, m in vector.items():
