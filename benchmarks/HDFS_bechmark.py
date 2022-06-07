@@ -9,8 +9,8 @@ from loglizer import dataloader, preprocessing
 from loglizer.models import LogClustering, InvariantsMiner, PCA
 import pandas as pd
 
-run_models = ["InvariantsMiner"]
-hparams_search = True
+run_models = ["PCA"]
+hparams_search = False
 print("Starting benchmark")
 
 if __name__ == '__main__':
@@ -30,8 +30,10 @@ if __name__ == '__main__':
                                                       normalization='zero-mean',num_keys=415)
             x_test = feature_extractor.transform(x_te)
             x_val = feature_extractor.transform(x_va)
-            model = PCA(n_components=18)
+            model = PCA(n_components=3, c_alpha=3.8906)
+            t_s = time.time()
             model.fit(x_train)
+            t_e = time.time()
             if hparams_search:
                 for n_components in range(19):
                     for c_alpha in [1.7507, 1.9600, 2.5758, 2.807, 2.9677, 3.2905, 3.4808, 3.8906, 4.4172]:
@@ -47,8 +49,8 @@ if __name__ == '__main__':
             x_test = feature_extractor.transform(x_te)
             x_val = feature_extractor.transform(x_va)
             t_s = time.time()
-            model = InvariantsMiner(epsilon=0.5)
-            #model.fit(x_train)
+            model = InvariantsMiner(epsilon=0.1, percentage=1.0)
+            model.fit(x_train)
             t_e = time.time()
             print(f"Time for Training: {t_e - t_s:.3f}s")
             pvals = [0.96,0.96,0.97,0.98,0.99,0.995,0.999,1.0]
@@ -76,7 +78,9 @@ if __name__ == '__main__':
             x_test = feature_extractor.transform(x_te)
             x_val = feature_extractor.transform(x_va)
             model = LogClustering(max_dist=0.3, anomaly_threshold=0.3)
+            t_s = time.time()
             model.fit(x_train)  # Use only normal samples for training
+            t_e = time.time()
             if hparams_search:
                 for mdist in [0.1, 0.2, 0.3, 0.4]:
                     for at in [0.1, 0.2, 0.3, 0.4]:
@@ -89,11 +93,11 @@ if __name__ == '__main__':
 
 
         print('Validation accuracy:')
-        t_s = time.time()
+        t_s_p = time.time()
         precision, recall, f1 = model.evaluate(x_val, y_val)
-        t_e = time.time()
-        print(f"Time for Predicting: {t_e - t_s:.3f}s")
-        benchmark_results.append([_model + '-val', precision, recall, f1])
+        t_e_p = time.time()
+        print(f"Time for Predicting: {t_e_p - t_s_p:.3f}s")
+        benchmark_results.append([_model + '-val', precision, recall, f1, t_e -t_s, t_e_p - t_s_p])
 
     pd.DataFrame(benchmark_results, columns=['Model', 'Precision', 'Recall', 'F1', 't_train', 't_predict']) \
-      .to_csv('benchmark_result2.csv', index=False)
+      .to_csv('benchmark_result_pca.csv', index=False)
