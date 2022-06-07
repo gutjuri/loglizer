@@ -73,7 +73,7 @@ for m in models:
     with open(fname_vector) as f:
         js = json.load(f)
     vectors[m] = js
-    results[m] = pd.read_csv(f"benchmarks/benchmark-result_{m}.csv")
+    results[m] = pd.read_csv(f"benchmarks/benchmark_result_{m}.csv")
 make_cm(vectors)
 output_t1(results)
 print()
