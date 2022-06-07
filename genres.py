@@ -65,7 +65,7 @@ def output_t1(res):
 def output_t2(vector):
     for x, m in vector.items():
         m = confusion_matrix(m["y_true"], m["y_pred"])
-        print(f"{x:17}&${m['cm'][1][1]}$&${m['cm'][0][1]}$&${m['cm'][0][0]}$&${m['cm'][1][0]}$??".replace("?", "\\"))
+        print(f"{x:17}&${m[1][1]}$&${m[0][1]}$&${m[0][0]}$&${m[1][0]}$??".replace("?", "\\"))
 
 vectors = {}
 results = {}
