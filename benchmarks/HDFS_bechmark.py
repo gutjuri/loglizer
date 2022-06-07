@@ -10,7 +10,7 @@ from loglizer.models import LogClustering, InvariantsMiner, PCA
 import pandas as pd
 import json
 
-run_models = ["InvariantsMiner"]
+run_models = ["LogCluster"]
 hparams_search = False
 print("Starting benchmark")
 
@@ -72,7 +72,7 @@ if __name__ == '__main__':
                             [_model + '-test-' + str(p) + "-" + str(e), precision, recall, f1, t_e - t_s, t_e2 - t_e])
 
 
-        elif _model == 'LogClustering':
+        elif _model == 'LogCluster':
             feature_extractor = preprocessing.FeatureExtractor()
             x_train = feature_extractor.fit_transform(
                 x_tr, term_weighting='tf-idf', num_keys=415)
