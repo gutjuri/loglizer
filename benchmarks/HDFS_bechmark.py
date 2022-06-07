@@ -9,7 +9,7 @@ from loglizer import dataloader, preprocessing
 from loglizer.models import LogClustering, InvariantsMiner, PCA
 import pandas as pd
 
-run_models = ["PCA"]
+run_models = ["LogClustering"]
 hparams_search = False
 print("Starting benchmark")
 
@@ -77,7 +77,7 @@ if __name__ == '__main__':
                 x_tr, term_weighting='tf-idf', num_keys=415)
             x_test = feature_extractor.transform(x_te)
             x_val = feature_extractor.transform(x_va)
-            model = LogClustering(max_dist=0.3, anomaly_threshold=0.3)
+            model = LogClustering(max_dist=0.1, anomaly_threshold=0.4)
             t_s = time.time()
             model.fit(x_train)  # Use only normal samples for training
             t_e = time.time()
@@ -100,4 +100,4 @@ if __name__ == '__main__':
         benchmark_results.append([_model + '-val', precision, recall, f1, t_e -t_s, t_e_p - t_s_p])
 
     pd.DataFrame(benchmark_results, columns=['Model', 'Precision', 'Recall', 'F1', 't_train', 't_predict']) \
-      .to_csv('benchmark_result_pca.csv', index=False)
+      .to_csv('benchmark_result_logcluster.csv', index=False)
