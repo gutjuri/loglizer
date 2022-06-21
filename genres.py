@@ -1,24 +1,9 @@
 import json
-import sys
-import random
-import time
-import numpy as np
 import matplotlib.pyplot as plt
-from sklearn import svm
-from sklearn.ensemble import IsolationForest, RandomForestClassifier
-from sklearn.linear_model import SGDOneClassSVM
-from sklearn.neighbors import LocalOutlierFactor
-from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
-    precision_recall_fscore_support,
     ConfusionMatrixDisplay,
     confusion_matrix,
 )
-from sklearn.kernel_approximation import Nystroem
-from sklearn.pipeline import make_pipeline
-from datetime import datetime
-from collections import defaultdict
 import pandas as pd
 
 
@@ -34,7 +19,9 @@ def make_cm(res):
     gs = fig.add_gridspec(2, 2, hspace=0.5, wspace=0.5)
     ax = gs.subplots()
     i = 0
-    for x, m in res.items():
+    for x, m in sorted(res.items(), key=lambda y: y[1]["F-measure"]):
+        if x == "InvariantsMiner":
+            x = "Invariants Mining"
         axis = ax[i % 2, i // 2]
         axis.tick_params(labelsize=8)
         axis.tick_params(axis="y", labelrotation=45)
@@ -60,10 +47,14 @@ def make_cm(res):
 
 def output_t1(res):
     for x, m in res.items():
+        if x == "InvariantsMiner":
+            x = "Invariants Mining"
         print(f"{x:17}&${m['Precision'][0]:.3f}$&${m['Recall'][0]:.3f}$&${m['F1'][0]:.3f}$&{'?SI{'}{1000*m['t_train'][0]/l_tr:.3f}{'}{?milli?second}'}&{'?SI{'}{1000*m['t_predict'][0]/(l_val):.3f}{'}{?milli?second}??'}".replace("?", "\\"))
 
 def output_t2(vector):
     for x, m in vector.items():
+        if x == "InvariantsMiner":
+            x = "Invariants Mining"
         m = confusion_matrix(m["y_true"], m["y_pred"])
         print(f"{x:17}&${m[1][1]}$&${m[0][1]}$&${m[0][0]}$&${m[1][0]}$??".replace("?", "\\"))
 
