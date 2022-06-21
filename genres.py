@@ -19,7 +19,7 @@ def make_cm(res):
     gs = fig.add_gridspec(2, 2, hspace=0.5, wspace=0.5)
     ax = gs.subplots()
     i = 0
-    for x, m in sorted(res.items(), key=lambda y: y[1]["F-measure"]):
+    for x, m in sorted(res.items(), key=lambda y: y[1]["F1"]):
         if x == "InvariantsMiner":
             x = "Invariants Mining"
         axis = ax[i % 2, i // 2]
