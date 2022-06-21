@@ -19,7 +19,7 @@ def make_cm(vector, res):
     gs = fig.add_gridspec(2, 2, hspace=0.5, wspace=0.5)
     ax = gs.subplots()
     i = 0
-    for x, m in sorted(vector.items(), key=lambda y: res[y[0]]["F1"]):
+    for x, m in sorted(vector.items(), key=lambda y: res[y[0]]["F1"][0]):
         if x == "InvariantsMiner":
             x = "Invariants Mining"
         axis = ax[i % 2, i // 2]
@@ -46,13 +46,13 @@ def make_cm(vector, res):
     plt.savefig(f"/lustre/work/ws/ws1/ul_csu94-test/Graphics/ad-all.svg")
 
 def output_t1(res):
-    for x, m in sorted(res.items(), key=lambda y: res[y[0]]["F1"]):
+    for x, m in sorted(res.items(), key=lambda y: res[y[0]]["F1"][0]):
         if x == "InvariantsMiner":
             x = "Invariants Mining"
         print(f"{x:17}&${m['Precision'][0]:.3f}$&${m['Recall'][0]:.3f}$&${m['F1'][0]:.3f}$&{'?SI{'}{1000*m['t_train'][0]/l_tr:.3f}{'}{?milli?second}'}&{'?SI{'}{1000*m['t_predict'][0]/(l_val):.3f}{'}{?milli?second}??'}".replace("?", "\\"))
 
 def output_t2(vector, res):
-    for x, m in sorted(vector.items(), key=lambda y: res[y[0]]["F1"]):
+    for x, m in sorted(vector.items(), key=lambda y: res[y[0]]["F1"][0]):
         if x == "InvariantsMiner":
             x = "Invariants Mining"
         m = confusion_matrix(m["y_true"], m["y_pred"])
