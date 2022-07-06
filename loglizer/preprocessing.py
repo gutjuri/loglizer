@@ -29,11 +29,11 @@ class Iterator(Dataset):
 
 class Vectorizer(object):
 
-    def fit_transform(self, x_train, window_y_train, y_train):
+    def fit_transform(self, x_train, window_y_train, y_train, num_keys):
         self.label_mapping = {eid: idx for idx, eid in enumerate(window_y_train.unique(), 2)}
         self.label_mapping["#OOV"] = 0
         self.label_mapping["#Pad"] = 1
-        self.num_labels = len(self.label_mapping)
+        self.num_labels = num_keys
         return self.transform(x_train, window_y_train, y_train)
 
     def transform(self, x, window_y, y):

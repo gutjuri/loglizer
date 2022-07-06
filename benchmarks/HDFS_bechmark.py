@@ -6,12 +6,12 @@ import sys
 import time
 sys.path.append('../')
 from loglizer import dataloader, preprocessing
-from loglizer.models import LogClustering, InvariantsMiner, PCA
+from loglizer.models import LogClustering, InvariantsMiner, PCA, DeepLog
 import pandas as pd
 import json
 
-run_models = ["LogCluster"]
-hparams_search = False
+run_models = ["PCA"]
+hparams_search = True
 print("Starting benchmark")
 
 if __name__ == '__main__':
@@ -91,7 +91,25 @@ if __name__ == '__main__':
                         precision, recall, f1 = model.evaluate(x_test, y_test)
                         benchmark_results.append(
                             [_model + '-test-' + str(mdist) + "-" + str(at), precision, recall, f1])
-
+        elif _model == 'DeepLog':
+            feature_extractor = preprocessing.Vectorizer()
+            x_train = feature_extractor.fit_transform(
+                x_tr,  num_keys=415)
+            x_test = feature_extractor.transform(x_te)
+            x_val = feature_extractor.transform(x_va)
+            model = DeepLog(num_labels=415, device=-1)
+            t_s = time.time()
+            model.fit(x_train)  # Use only normal samples for training
+            t_e = time.time()
+            if hparams_search:
+                for mdist in [0.1, 0.2, 0.3, 0.4]:
+                    for at in [0.1, 0.2, 0.3, 0.4]:
+                        model = LogClustering(
+                            max_dist=mdist, anomaly_threshold=at)
+                        model.fit(x_train)
+                        precision, recall, f1 = model.evaluate(x_test, y_test)
+                        benchmark_results.append(
+                            [_model + '-test-' + str(mdist) + "-" + str(at), precision, recall, f1])
 
         print('Validation accuracy:')
         t_s_p = time.time()
