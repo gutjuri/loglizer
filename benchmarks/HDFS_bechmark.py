@@ -38,11 +38,17 @@ if __name__ == '__main__':
             if hparams_search:
                 for n_components in range(19):
                     for c_alpha in [1.7507, 1.9600, 2.5758, 2.807, 2.9677, 3.2905, 3.4808, 3.8906, 4.4172]:
+                        
+                        t_s = time.time()
                         model = PCA(n_components=n_components, c_alpha=c_alpha)
                         model.fit(x_train)
-                        precision, recall, f1 = model.evaluate(x_test, y_test)
+                        t_e = time.time()
+                        precision, recall, f1, y_pred = model.evaluate(x_test, y_test)
+                        t_e2 = time.time()
+                        with open(f"vecs-{_model}-{n_components}-{c_alpha}", "w") as f:
+                            f.write(json.dumps({"y_pred": y_pred.tolist(), "y_true": y_test.tolist()}))
                         benchmark_results.append(
-                            [_model + '-test-' + str(n_components) + "-" + str(c_alpha), precision, recall, f1])
+                            [_model + '-' + str(n_components) + "-" + str(c_alpha), precision, recall, f1, t_e - t_s, t_e2 - t_e])
 
         elif _model == 'InvariantsMiner':
             feature_extractor = preprocessing.FeatureExtractor()
@@ -66,10 +72,12 @@ if __name__ == '__main__':
                         t_s = time.time()
                         model.fit(x_train)
                         t_e =time.time()
-                        precision, recall, f1 = model.evaluate(x_test, y_test)
+                        precision, recall, f1, y_pred = model.evaluate(x_test, y_test)
                         t_e2 = time.time()
+                        with open(f"vecs-{_model}-{p}-{e}", "w") as f:
+                            f.write(json.dumps({"y_pred": y_pred.tolist(), "y_true": y_test.tolist()}))  
                         benchmark_results.append(
-                            [_model + '-test-' + str(p) + "-" + str(e), precision, recall, f1, t_e - t_s, t_e2 - t_e])
+                            [_model + '-' + str(p) + "-" + str(e), precision, recall, f1, t_e - t_s, t_e2 - t_e])
 
 
         elif _model == 'LogCluster':
@@ -85,40 +93,27 @@ if __name__ == '__main__':
             if hparams_search:
                 for mdist in [0.1, 0.2, 0.3, 0.4]:
                     for at in [0.1, 0.2, 0.3, 0.4]:
+                        t_s = time.time()
                         model = LogClustering(
                             max_dist=mdist, anomaly_threshold=at)
                         model.fit(x_train)
-                        precision, recall, f1 = model.evaluate(x_test, y_test)
+                        t_e = time.time()
+                        precision, recall, f1, y_pred = model.evaluate(x_test, y_test)
+                        t_e2 = time.time()
+                        with open(f"vecs-{_model}-{mdist}-{at}", "w") as f:
+                            f.write(json.dumps({"y_pred": y_pred.tolist(), "y_true": y_test.tolist()}))
                         benchmark_results.append(
-                            [_model + '-test-' + str(mdist) + "-" + str(at), precision, recall, f1])
-        elif _model == 'DeepLog':
-            feature_extractor = preprocessing.Vectorizer()
-            x_train = feature_extractor.fit_transform(
-                x_tr,  num_keys=415)
-            x_test = feature_extractor.transform(x_te)
-            x_val = feature_extractor.transform(x_va)
-            model = DeepLog(num_labels=415, device=-1)
-            t_s = time.time()
-            model.fit(x_train)  # Use only normal samples for training
-            t_e = time.time()
-            if hparams_search:
-                for mdist in [0.1, 0.2, 0.3, 0.4]:
-                    for at in [0.1, 0.2, 0.3, 0.4]:
-                        model = LogClustering(
-                            max_dist=mdist, anomaly_threshold=at)
-                        model.fit(x_train)
-                        precision, recall, f1 = model.evaluate(x_test, y_test)
-                        benchmark_results.append(
-                            [_model + '-test-' + str(mdist) + "-" + str(at), precision, recall, f1])
+                            [_model + '-' + str(mdist) + "-" + str(at), precision, recall, f1, t_e - t_s, t_e2 - t_e])
+
 
         print('Validation accuracy:')
         t_s_p = time.time()
         precision, recall, f1, y_pred = model.evaluate(x_val, y_val)
         t_e_p = time.time()
-        with open(f"vecs-{_model}", "w") as f:
-            f.write(json.dumps({"y_pred": y_pred.tolist(), "y_true": y_val.tolist()}))
+        #with open(f"vecs-{_model}", "w") as f:
+        #    f.write(json.dumps({"y_pred": y_pred.tolist(), "y_true": y_val.tolist()}))
         print(f"Time for Predicting: {t_e_p - t_s_p:.3f}s")
-        benchmark_results.append([_model + '-val', precision, recall, f1, t_e -t_s, t_e_p - t_s_p])
+        #benchmark_results.append([_model + '-val', precision, recall, f1, t_e -t_s, t_e_p - t_s_p])
 
     pd.DataFrame(benchmark_results, columns=['Model', 'Precision', 'Recall', 'F1', 't_train', 't_predict']) \
       .to_csv(f"benchmark_result_{_model}.csv", index=False)
