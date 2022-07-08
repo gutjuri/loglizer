@@ -10,7 +10,7 @@ from loglizer.models import LogClustering, InvariantsMiner, PCA, DeepLog
 import pandas as pd
 import json
 
-run_models = ["InvariantsMiner"]
+run_models = ["LogCluster"]
 hparams_search = True
 print("Starting benchmark")
 
