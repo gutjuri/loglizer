@@ -1,5 +1,6 @@
 from glob import glob
 import json
+import os
 import matplotlib.pyplot as plt
 from sklearn.metrics import (
     ConfusionMatrixDisplay,
@@ -54,8 +55,9 @@ def output_t1(res):
 
 def output_t2(vector, res):
     for x, m in sorted(vector.items(), key=lambda y: res[y[0]]["F1"]):
-        if x == "InvariantsMiner":
-            x = "Invariants Mining"
+        if x.startswith("InvariantsMiner"):
+            x = x.replace("InvariantsMiner", "Invariants Mining")
+        
         m = confusion_matrix(m["y_true"], m["y_pred"])
         print(f"{x:17}&${m[1][1]}$&${m[0][1]}$&${m[0][0]}$&${m[1][0]}$??".replace("?", "\\"))
 
@@ -71,6 +73,16 @@ for m in models:
     for _, x in df.iterrows():
         #print(x)
         results[x["Model"]] = x
+
+res_dl_d = "/lustre/work/ws/ws1/ul_csu94-deeplog/results/*-*-*-*.csv"
+
+for fname in glob(res_dl_d):
+    with open(fname) as f:
+        df = pd.read_csv(fname)
+    bn = os.path.basename(fname)
+    modelname = f"DeepLog-{bn[:-4]}"
+    results[modelname] = df
+
 #make_cm(vectors, results)
 output_t1(results)
 print()
