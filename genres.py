@@ -9,7 +9,7 @@ import pandas as pd
 
 
 models = ["PCA", "LogCluster", "InvariantsMiner", "DeepLog"]
-models  =["PCA"]
+models  =["PCA", "LogCluster", "InvariantsMiner"]
 l_tr = 27742
 l_val = 60486
 
