@@ -51,15 +51,16 @@ def output_t1(res):
         if x.startswith("InvariantsMiner"):
             x = x.replace("InvariantsMiner", "Invariants Mining")
         for a, b in [(1.7507, 0.08), (1.9600, 0.05), (2.5758, 0.01), (2.807, 0.005), (2.9677, 0.003), (3.2905, 0.001), (3.4808,0.0005), (3.8906,0.0001), (4.4172,0.00001)]:
-            x = x.replace(str(a), str(b))
+            x = x.replace(str(a), f"{b:f}")
         print(f"{x:17}&${m['Precision']:.3f}$&${m['Recall']:.3f}$&${m['F1']:.3f}$&{'?SI{'}{1000*m['t_train']/l_tr:.3f}{'}{?milli?second}'}&{'?SI{'}{1000*m['t_predict']/(l_val):.3f}{'}{?milli?second}??'}".replace("?", "\\"))
 
 def output_t2(vector, res):
+    print(res)
     for x, m in sorted(vector.items(), key=lambda y: res[y[0]]["F1"]):
         if x.startswith("InvariantsMiner"):
             x = x.replace("InvariantsMiner", "Invariants Mining")
         for a, b in [(1.7507, 0.08), (1.9600, 0.05), (2.5758, 0.01), (2.807, 0.005), (2.9677, 0.003), (3.2905, 0.001), (3.4808,0.0005), (3.8906,0.0001), (4.4172,0.00001)]:
-            x = x.replace(str(a), str(b))
+            x = x.replace(str(a), f"{b:f}")
         
         m = confusion_matrix(m["y_true"], m["y_pred"])
         print(f"{x:17}&${m[1][1]}$&${m[0][1]}$&${m[0][0]}$&${m[1][0]}$??".replace("?", "\\"))
@@ -86,7 +87,6 @@ for fname in glob(res_dl_d):
     modelname = f"DeepLog-{bn[:-4]}"
     for _, x in df.iterrows():
         results[modelname] = x
-    print(df)
 
 #make_cm(vectors, results)
 output_t1(results)
