@@ -8,7 +8,6 @@ from sklearn.metrics import (
 )
 import pandas as pd
 
-
 models = ["PCA", "LogCluster", "InvariantsMiner", "DeepLog"]
 models  =["PCA", "LogCluster", "InvariantsMiner"]
 l_tr = 27742
@@ -57,6 +56,8 @@ def output_t2(vector, res):
     for x, m in sorted(vector.items(), key=lambda y: res[y[0]]["F1"]):
         if x.startswith("InvariantsMiner"):
             x = x.replace("InvariantsMiner", "Invariants Mining")
+        for a, b in [(1.7507, 0.08), (1.9600, 0.05), (2.5758, 0.01), (2.807, 0.005), (2.9677, 0.003), (3.2905, 0.001), (3.4808,0.0005), (3.8906,0.0001), (4.4172,0.00001)]:
+            x = x.replace(str(a), str(b))
         
         m = confusion_matrix(m["y_true"], m["y_pred"])
         print(f"{x:17}&${m[1][1]}$&${m[0][1]}$&${m[0][0]}$&${m[1][0]}$??".replace("?", "\\"))
