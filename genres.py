@@ -84,7 +84,7 @@ for fname in glob(res_dl_d):
         df = pd.read_csv(fname)
     bn = os.path.basename(fname)
     modelname = f"DeepLog-{bn[:-4]}"
-    results[modelname] = df
+    results[modelname] = df[0]
     print(df)
 
 #make_cm(vectors, results)
