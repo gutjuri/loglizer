@@ -55,7 +55,6 @@ def output_t1(res):
         print(f"{x:17}&${m['Precision']:.3f}$&${m['Recall']:.3f}$&${m['F1']:.3f}$&{'?SI{'}{1000*m['t_train']/l_tr:.3f}{'}{?milli?second}'}&{'?SI{'}{1000*m['t_predict']/(l_val):.3f}{'}{?milli?second}??'}".replace("?", "\\"))
 
 def output_t2(vector, res):
-    print(res)
     for x, m in sorted(vector.items(), key=lambda y: res[y[0]]["F1"]):
         if x.startswith("InvariantsMiner"):
             x = x.replace("InvariantsMiner", "Invariants Mining")
